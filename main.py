@@ -31,5 +31,10 @@ TEXT = "\n".join(
 )
 
 # Bytes, not text mode: text mode would write the platform's line ends and its default encoding.
+# Fail here, loudly, instead of shipping a text the gate would refuse:
+# the gate takes 1-1,000 characters, and not only whitespace.
+if not 1 <= len(TEXT) <= 1000 or not TEXT.strip():
+    raise SystemExit(f"entry text is {len(TEXT)} characters; the gate takes 1-1,000")
+
 with open(os.path.join(OUTPUT_DIR, "entry.txt"), "wb") as f:
     f.write(TEXT.encode("utf-8"))
